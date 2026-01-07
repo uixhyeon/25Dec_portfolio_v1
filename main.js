@@ -18,14 +18,25 @@ const renderNavigation = (navData) => {
                 .join(" ");
             const content = item.iconClass ? `<i class="${item.iconClass}"></i>` : item.label;
             const target = item.external ? ' target="_blank" rel="noopener noreferrer"' : "";
-            return `<li><a href="${item.href}" class="${classes.trim()}"${target}>${content}</a></li>`;
+            // 링크 처리: Project, Design, Contact는 별도 페이지로
+            let href = item.href;
+            if (item.href === "#team-projects" || item.href === "#personal-projects") {
+                href = "nav.html#team-projects"; // 네비게이션 페이지에서 프로젝트로
+            } else if (item.href === "#design") {
+                href = "nav.html#design"; // 네비게이션 페이지에서 디자인으로
+            } else if (item.href === "#contact") {
+                href = "nav.html#contact"; // 네비게이션 페이지에서 Contact로
+            } else if (item.href.startsWith('#')) {
+                href = `nav.html${item.href}`; // 네비게이션 페이지로
+            }
+            return `<li><a href="${href}" class="${classes.trim()}"${target}>${content}</a></li>`;
         })
         .join("");
 
     navRoot.innerHTML = `
         <div class="nav-wrapper">
             <div class="nav-container">
-                <a href="/" class="nav-logo">${navData.logo}<span class="logo-end">${logoAccent}</span></a>
+                <a href="nav.html" class="nav-logo">${navData.logo}<span class="logo-end">${logoAccent}</span></a>
             <ul class="nav-menu">${linksMarkup}</ul>
             </div>
         </div>
@@ -52,7 +63,16 @@ const renderHero = (heroData) => {
 
     const bottomNavMarkup = (heroData.bottomNav || [])
         .map(item => {
-            return `<a href="${item.href}" class="hero-nav-link">${item.label}</a>`;
+            // Project, Design, Contact는 별도 페이지로
+            let href = item.href;
+            if (item.href === "#team-projects" || item.href === "#personal-projects") {
+                href = "projects.html";
+            } else if (item.href === "#design") {
+                href = "design.html";
+            } else if (item.href === "#contact") {
+                href = "contact.html";
+            }
+            return `<a href="${href}" class="hero-nav-link">${item.label}</a>`;
         })
         .join("");
 
@@ -61,7 +81,7 @@ const renderHero = (heroData) => {
             <div class="hero-top-label">${topLabel}</div>
             <div class="hero-name">
                 ${name}
-                <span class="hero-cursor">|</span>
+                <span class="hero-cursor"></span>
             </div>
             <div class="hero-description">${description}</div>
             <nav class="hero-bottom-nav">
@@ -183,15 +203,17 @@ const renderContact = (contactData) => {
     const footer = document.createElement("footer");
     footer.className = "contact-footer";
     
-    // 좌측 패널
-    const leftPanel = document.createElement("div");
-    leftPanel.className = "contact-left";
+    // 전체를 하나의 컬럼으로 표시
+    const contactContainer = document.createElement("div");
+    contactContainer.className = "contact-container";
     
+    // 이름
     const nameBox = document.createElement("div");
     nameBox.className = "contact-name-box";
     nameBox.textContent = contactData.name || "UixHyeon";
-    leftPanel.appendChild(nameBox);
+    contactContainer.appendChild(nameBox);
     
+    // 정보 리스트 (이메일, 직업)
     if (contactData.info && contactData.info.length > 0) {
         const infoList = document.createElement("div");
         infoList.className = "contact-info-list";
@@ -201,20 +223,18 @@ const renderContact = (contactData) => {
             infoItem.textContent = item;
             infoList.appendChild(infoItem);
         });
-        leftPanel.appendChild(infoList);
+        contactContainer.appendChild(infoList);
     }
     
+    // 저작권
     if (contactData.copyright) {
         const copyright = document.createElement("div");
         copyright.className = "contact-copyright";
         copyright.textContent = contactData.copyright;
-        leftPanel.appendChild(copyright);
+        contactContainer.appendChild(copyright);
     }
     
-    // 우측 패널
-    const rightPanel = document.createElement("div");
-    rightPanel.className = "contact-right";
-    
+    // 링크 리스트 (GitHub, Instagram, 블로그)
     if (contactData.links && contactData.links.length > 0) {
         const linksList = document.createElement("div");
         linksList.className = "contact-links-list";
@@ -244,11 +264,10 @@ const renderContact = (contactData) => {
             
             linksList.appendChild(link);
         });
-        rightPanel.appendChild(linksList);
+        contactContainer.appendChild(linksList);
     }
     
-    footer.appendChild(leftPanel);
-    footer.appendChild(rightPanel);
+    footer.appendChild(contactContainer);
     contactRoot.innerHTML = "";
     contactRoot.appendChild(divider);
     contactRoot.appendChild(footer);
@@ -485,21 +504,7 @@ const renderSite = (data) => {
     renderAbout(data.about);
     }
     
-    // 프로젝트 섹션들 (빈 배열이어도 섹션은 표시)
-    if (data.teamProjects !== undefined) {
-        renderProjects(data.teamProjects || [], "team-projects", "TEAM PROJECTS", "팀 프로젝트");
-    }
-    if (data.personalProjects !== undefined) {
-        renderProjects(data.personalProjects || [], "personal-projects", "PERSONAL PROJECTS", "개인 프로젝트");
-    }
-    if (data.design !== undefined) {
-        renderProjects(data.design || [], "design", "DESIGN", "디자인");
-    }
-    
-    // Contact 섹션
-    if (data.contact) {
-        renderContact(data.contact);
-    }
+    // 프로젝트, 디자인, Contact는 별도 페이지로 이동 (projects.html, design.html, contact.html)
 };
 
 window.addEventListener("DOMContentLoaded", () => {
