@@ -18,16 +18,16 @@ const renderNavigation = (navData) => {
                 .join(" ");
             const content = item.iconClass ? `<i class="${item.iconClass}"></i>` : item.label;
             const target = item.external ? ' target="_blank" rel="noopener noreferrer"' : "";
-            // 링크 처리: Project, Design, Contact는 별도 페이지로
+            // 링크 처리: Project, Design, Contact는 별도 페이지로 바로 이동
             let href = item.href;
             if (item.href === "#team-projects" || item.href === "#personal-projects") {
-                href = "nav.html#team-projects"; // 네비게이션 페이지에서 프로젝트로
+                href = "projects.html"; // 프로젝트 페이지로 바로 이동
             } else if (item.href === "#design") {
-                href = "nav.html#design"; // 네비게이션 페이지에서 디자인으로
+                href = "design.html"; // 디자인 페이지로 바로 이동
             } else if (item.href === "#contact") {
-                href = "nav.html#contact"; // 네비게이션 페이지에서 Contact로
+                href = "contact.html"; // Contact 페이지로 바로 이동
             } else if (item.href.startsWith('#')) {
-                href = `nav.html${item.href}`; // 네비게이션 페이지로
+                href = `index.html${item.href}`; // 메인 페이지로
             }
             return `<li><a href="${href}" class="${classes.trim()}"${target}>${content}</a></li>`;
         })
