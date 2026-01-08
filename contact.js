@@ -19,13 +19,13 @@ const renderNavigation = (navData) => {
             // 링크 처리
             let href = item.href;
             if (item.href === "#team-projects" || item.href === "#personal-projects") {
-                href = "projects.html";
+                href = "projects.html"; // 프로젝트 페이지로
             } else if (item.href === "#design") {
-                href = "design.html";
+                href = "design.html"; // 디자인 페이지로
             } else if (item.href === "#contact") {
                 href = item.href; // 현재 페이지 내 앵커
             } else if (item.href.startsWith('#')) {
-                href = `index.html${item.href}`;
+                href = `index.html${item.href}`; // 메인 페이지로
             }
             return `<li><a href="${href}" class="${classes.trim()}"${target}>${content}</a></li>`;
         })
@@ -44,9 +44,6 @@ const renderNavigation = (navData) => {
 const renderContact = (contactData) => {
     const contactRoot = document.getElementById("contact");
     if (!contactRoot || !contactData) return;
-    
-    const divider = document.createElement("div");
-    divider.className = "section-divider";
     
     const footer = document.createElement("footer");
     footer.className = "contact-footer";
@@ -117,7 +114,6 @@ const renderContact = (contactData) => {
     
     footer.appendChild(contactContainer);
     contactRoot.innerHTML = "";
-    contactRoot.appendChild(divider);
     contactRoot.appendChild(footer);
 };
 

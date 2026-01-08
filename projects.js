@@ -20,8 +20,10 @@ const renderNavigation = (navData) => {
             let href = item.href;
             if (item.href === "#team-projects" || item.href === "#personal-projects") {
                 href = item.href; // 현재 페이지 내 앵커
+            } else if (item.href === "#design") {
+                href = "design.html"; // 디자인 페이지로
             } else if (item.href === "#contact") {
-                href = "contact.html";
+                href = "contact.html"; // Contact 페이지로
             } else if (item.href.startsWith("#")) {
                 href = `index.html${item.href}`; // 메인 페이지로
             }

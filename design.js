@@ -18,10 +18,12 @@ const renderNavigation = (navData) => {
             const target = item.external ? ' target="_blank" rel="noopener noreferrer"' : "";
             // 링크 처리
             let href = item.href;
-            if (item.href === "#design") {
+            if (item.href === "#team-projects" || item.href === "#personal-projects") {
+                href = "projects.html"; // 프로젝트 페이지로
+            } else if (item.href === "#design") {
                 href = item.href; // 현재 페이지 내 앵커
             } else if (item.href === "#contact") {
-                href = "contact.html";
+                href = "contact.html"; // Contact 페이지로
             } else if (item.href.startsWith("#")) {
                 href = `index.html${item.href}`; // 메인 페이지로
             }
@@ -94,9 +96,6 @@ const renderDesign = (designs, sectionId, labelText, titleText) => {
         return;
     }
     
-    const divider = document.createElement("div");
-    divider.className = "section-divider";
-    
     const label = document.createElement("div");
     label.className = "section-label";
     label.textContent = labelText;
@@ -114,7 +113,6 @@ const renderDesign = (designs, sectionId, labelText, titleText) => {
     container.className = "design-grid";
     
     designRoot.innerHTML = "";
-    designRoot.appendChild(divider);
     designRoot.appendChild(label);
     designRoot.appendChild(title);
     
